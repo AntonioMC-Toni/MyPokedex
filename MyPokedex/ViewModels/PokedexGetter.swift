@@ -63,7 +63,8 @@ class PokedexGetter: ObservableObject {
                     let decoder = JSONDecoder()
                     if let safeData = data {
                         do{
-                            let pokemon = try decoder.decode(Pokemon.self, from: safeData)
+                            var pokemon = try decoder.decode(Pokemon.self, from: safeData)
+                            pokemon.favorite = UserDefaults.standard.bool(forKey: String(pokemon.id))
                             self.pokedex.append(pokemon)
                         } catch {
                             print(error)

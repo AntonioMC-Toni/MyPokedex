@@ -20,6 +20,13 @@ struct Pokemon: Codable, Identifiable {
     }
     let sprites: PokeSprites
     let types: [TypeEntry]
+    var favorite: Bool?
+    
+    mutating func favoriteToggle(){
+        if favorite == true {
+            favorite = false
+        } else {favorite = true}
+    }
 }
 
 struct PokeSprites: Codable {

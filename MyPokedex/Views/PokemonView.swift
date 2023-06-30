@@ -8,15 +8,17 @@
 import SwiftUI
 
 struct PokemonView: View {
-    @State var favorite: Bool
-    var pokemon: Pokemon
+    @State var pokemon: Pokemon
     
     var body: some View {
         ZStack{
             VStack{
                 Text("\(pokemon.id) \n\(pokemon.name)")
                     .font(.custom("PressStart2P-Regular", size: 40))
-                    .lineSpacing(25)
+                    .lineSpacing(15)
+                    .scaledToFill()
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(2)
                 HStack {
                     if pokemon.sprites.front_default != nil {
                         AsyncImage(url: URL(string: pokemon.sprites.front_default ?? "")){ image in
@@ -85,19 +87,19 @@ struct PokemonView: View {
                             .font(.custom("PressStart2P-Regular", size: 14))
                     }}
                 }
-                
-                
+
                 Button(action: {
                     print("added favorite")
-                    favorite.toggle()
-                    UserDefaults.standard.set(favorite, forKey: String(pokemon.id))
-                        }) {
-                            if favorite {
+                    pokemon.favoriteToggle()
+                    print(pokemon.favorite!)
+                    UserDefaults.standard.set(pokemon.favorite, forKey: String(pokemon.id))
+                }) {
+                    if pokemon.favorite! {
                         Image("love")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 100)
-                            
+                        
                     } else {
                         Image("poke")
                             .resizable()
@@ -112,6 +114,6 @@ struct PokemonView: View {
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonView(favorite: false, pokemon: Pokemon(name: "Pikachu", id: 25, height: 4, weight: 60, sprites: PokeSprites(front_default: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png", front_shiny: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/25.png", back_default: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png", back_shiny: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/25.png"), types: [TypeEntry(type: PokeType(name: "electric"))]))
+        PokemonView(pokemon: Pokemon(name: "Pikachu", id: 25, height: 4, weight: 60, sprites: PokeSprites(front_default: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png", front_shiny: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/25.png", back_default: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png", back_shiny: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/25.png"), types: [TypeEntry(type: PokeType(name: "electric"))], favorite: UserDefaults.standard.bool(forKey: "25")))
     }
 }

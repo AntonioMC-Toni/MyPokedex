@@ -13,13 +13,12 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List(pokedexGetter.pubPokedex) {pokemon in
-                @State var favorite = UserDefaults.standard.bool(forKey: String(pokemon.id))
-                NavigationLink(destination: PokemonView(favorite: favorite, pokemon: pokemon)) {
+                NavigationLink(destination: PokemonView(pokemon: pokemon)) {
                     HStack{
                         VStack {
                             Text("\(pokemon.id)")
                                 .font(.custom("PressStart2P-Regular", size: 16))
-                            if favorite {
+                            if pokemon.favorite! {
                                 Image("love")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -38,20 +37,18 @@ struct ContentView: View {
                         .frame(width: 80, height: 80)
                         Text("\(pokemon.name)")
                             .font(.custom("PressStart2P-Regular", size: 16))
+                            .scaledToFill()
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
                     }
                     .onAppear{
                         //On reappear? something like that
-                        favorite = UserDefaults.standard.bool(forKey: String(pokemon.id))
-                        print("\(pokemon.name) appeared! \(favorite) - \(UserDefaults.standard.bool(forKey: String(pokemon.id)))")
-                        favorite = UserDefaults.standard.bool(forKey: String(pokemon.id))
+                        pokedexGetter.pubPokedex[pokemon.id-1].favorite = UserDefaults.standard.bool(forKey: String(pokemon.id))
                         if (self.pokedexGetter.pubPokedex.last?.id == pokemon.id){
                             self.pokedexGetter.fetchPokePage()}
-                }
-                    .onChange(of: favorite, perform: { newValue in
-                        favorite = newValue
-                    })
-                .onAppear{
-                    
+                    }
+                    .onAppear{
+                        
                     }
                 }
             }
