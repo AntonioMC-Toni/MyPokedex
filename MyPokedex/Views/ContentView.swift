@@ -18,6 +18,8 @@ struct ContentView: View {
                         VStack {
                             Text("\(pokemon.id)")
                                 .font(.custom("PressStart2P-Regular", size: 16))
+                                .minimumScaleFactor(0.5)
+                                .lineLimit(1)
                             if pokemon.favorite! {
                                 Image("love")
                                     .resizable()
@@ -37,7 +39,6 @@ struct ContentView: View {
                         .frame(width: 80, height: 80)
                         Text("\(pokemon.name)")
                             .font(.custom("PressStart2P-Regular", size: 16))
-                            .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
                     }
@@ -46,9 +47,6 @@ struct ContentView: View {
                         pokedexGetter.pubPokedex[pokemon.id-1].favorite = UserDefaults.standard.bool(forKey: String(pokemon.id))
                         if (self.pokedexGetter.pubPokedex.last?.id == pokemon.id){
                             self.pokedexGetter.fetchPokePage()}
-                    }
-                    .onAppear{
-                        
                     }
                 }
             }
